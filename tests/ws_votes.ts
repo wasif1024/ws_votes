@@ -21,6 +21,7 @@ describe("ws_votes", () => {
 
   it("Poll Initialization", async () => {
     // Add your test here.
+    console.log("Wallet Id now",wallet.publicKey.toBase58());
     console.log("Program Id now",program.programId.toBase58());
     const pollId = new BN(1);
     const pollStart = new BN(2);
