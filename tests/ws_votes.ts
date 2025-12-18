@@ -59,6 +59,13 @@ const tx = await program.methods
    //console.log("Your transaction signature", tx);
   });
   it("Candidate Vote", async () => {
+    const tx=await program.methods.vote("Smooth",new anchor.BN(1)).rpc();
+    const [candidateAddress] = PublicKey.findProgramAddressSync([new anchor.BN(1).toArrayLike(Buffer, "le", 8), Buffer.from("Smooth")], program.programId);
+    const candidate=await program.account.candidate.fetchNullable(candidateAddress);
+    console.log("Candidate values", candidate);
+    //expect(candidate.candidateName).to.equal("Smooth");
+    //expect(candidate.pollId.toNumber()).to.equal(1);
+    expect(candidate.candidateVote.toNumber()).to.equal(1);
    
     //console.log("Your transaction signature", tx);
 });
