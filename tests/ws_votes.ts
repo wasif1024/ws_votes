@@ -3,6 +3,7 @@ import { Program } from "@coral-xyz/anchor";
 import {PublicKey} from "@solana/web3.js";
 import type { WsVotes } from "../target/types/ws_votes";
 import { BN } from "@coral-xyz/anchor";
+import { expect } from "chai";
 import idl from "../target/idl/ws_votes.json";
 
 //const idl=require("../target/deploy/ws_vote.json");
@@ -23,14 +24,20 @@ describe("ws_votes", () => {
     // Add your test here.
     console.log("Wallet Id now",wallet.publicKey.toBase58());
     console.log("Program Id now",program.programId.toBase58());
-    const pollId = new BN(1);
-    const pollStart = new BN(2);
-    const pollEnd = new BN(3);
-    const description = "hhg";
+    const pollId = new anchor.BN(1);
+    const pollStart = new anchor.BN(0);
+    const pollEnd = new anchor.BN(1866067085);
+    const description = "Favourite fruit";
     
-    /*const tx = await program.methods
+const tx = await program.methods
       .initializeVoting(pollId, pollStart, pollEnd, description)
       .rpc();
-    console.log("Your transaction signature", tx);*/
+      const [pollAddress] = PublicKey.findProgramAddressSync([pollId.toArrayLike(Buffer, "le", 8)], program.programId);
+      console.log("Poll address", pollAddress.toBase58());
+      const poll=await program.account.poll.fetchNullable(pollAddress);
+      console.log("Poll values", poll);
+      expect(poll.pollId.toNumber()).to.equal(1); 
+      expect(poll.description).to.equal("Favourite fruit");
+      //console.log("Your transaction signature", tx);
   });
 });
