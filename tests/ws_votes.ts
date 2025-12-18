@@ -40,4 +40,26 @@ const tx = await program.methods
       expect(poll.description).to.equal("Favourite fruit");
       //console.log("Your transaction signature", tx);
   });
+  it("Candidate Initialization", async () => {
+   const tx=await program.methods.initializeCandidate("Smooth",new anchor.BN(1)).rpc();
+   const [candidateAddress] = PublicKey.findProgramAddressSync([new anchor.BN(1).toArrayLike(Buffer, "le", 8), Buffer.from("Smooth")], program.programId);
+   const candidate=await program.account.candidate.fetchNullable(candidateAddress);
+   console.log("Candidate values", candidate);
+   expect(candidate.candidateName).to.equal("Smooth");
+   expect(candidate.pollId.toNumber()).to.equal(1);
+   expect(candidate.candidateVote.toNumber()).to.equal(0);
+
+   const txCrunchy=await program.methods.initializeCandidate("Crunchy",new anchor.BN(1)).rpc();
+   const [crunchyCandidateAddress] = PublicKey.findProgramAddressSync([new anchor.BN(1).toArrayLike(Buffer, "le", 8), Buffer.from("Crunchy")], program.programId);
+   const crunchyCandidate=await program.account.candidate.fetchNullable(crunchyCandidateAddress);
+   console.log("Candidate values", candidate);
+   expect(crunchyCandidate.candidateName).to.equal("Crunchy");
+   expect(crunchyCandidate.pollId.toNumber()).to.equal(1);
+   expect(crunchyCandidate.candidateVote.toNumber()).to.equal(0);
+   //console.log("Your transaction signature", tx);
+  });
+  it("Candidate Vote", async () => {
+   
+    //console.log("Your transaction signature", tx);
+});
 });
